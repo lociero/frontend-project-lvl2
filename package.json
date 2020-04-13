@@ -1,0 +1,14 @@
+{
+  "name": "frontend-project-lvl2",
+  "version": "1.0.0",
+  "description": "hexlet frontend project lvl2",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "megaded",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^5.0.0"
+  }
+}
