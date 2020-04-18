@@ -1,21 +1,15 @@
 import fs from 'fs';
+import path from 'path';
 import genDiff from '../src/genDifference.js';
 
-const result = fs.readFileSync(
-  `${__dirname}/../fixtures/afterBeforeCopmared.txt`,
-  'utf-8',
-);
+const pathResolve = (fileName) => path.resolve(`${__dirname}/../fixtures/`, fileName);
+
+const result = fs.readFileSync(pathResolve('afterBeforeCopmared.txt'), 'utf-8');
 
 test('should be equal [.json]', () => {
-  const beforePath = `${__dirname}/../fixtures/before.json`;
-  const afterPath = `${__dirname}/../fixtures/after.json`;
-
-  expect(genDiff(beforePath, afterPath)).toEqual(result);
+  expect(genDiff(pathResolve('before.json'), pathResolve('after.json'))).toEqual(result);
 });
 
 test('should be equal [.yml]', () => {
-  const beforePath = `${__dirname}/../fixtures/before.yml`;
-  const afterPath = `${__dirname}/../fixtures/after.yml`;
-
-  expect(genDiff(beforePath, afterPath)).toEqual(result);
+  expect(genDiff(pathResolve('before.yml'), pathResolve('after.yml'))).toEqual(result);
 });
