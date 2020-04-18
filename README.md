@@ -11,4 +11,10 @@
 
 ### Пример работы:
 
+#### JSON:
+
 [![asciicast](https://asciinema.org/a/4zziwE20SaFilyl4De1SBZSnm.svg)](https://asciinema.org/a/4zziwE20SaFilyl4De1SBZSnm)
+
+#### YAML:
+
+[![asciicast](https://asciinema.org/a/5YE48NOIvHxruIZeRtsN0N2gm.svg)](https://asciinema.org/a/5YE48NOIvHxruIZeRtsN0N2gm)
