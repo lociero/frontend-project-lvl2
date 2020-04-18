@@ -13,3 +13,7 @@ test('should be equal [.json]', () => {
 test('should be equal [.yml]', () => {
   expect(genDiff(pathResolve('before.yml'), pathResolve('after.yml'))).toEqual(result);
 });
+
+test('should be equal [.ini]', () => {
+  expect(genDiff(pathResolve('before.ini'), pathResolve('after.ini'))).toEqual(result);
+});

@@ -18,3 +18,7 @@
 #### YAML:
 
 [![asciicast](https://asciinema.org/a/5YE48NOIvHxruIZeRtsN0N2gm.svg)](https://asciinema.org/a/5YE48NOIvHxruIZeRtsN0N2gm)
+
+### INI:
+
+[![asciicast](https://asciinema.org/a/AppzeBo6FcEPBuGdCzTq5PZwN.svg)](https://asciinema.org/a/AppzeBo6FcEPBuGdCzTq5PZwN)
