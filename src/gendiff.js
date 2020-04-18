@@ -9,8 +9,8 @@ const readFiles = (path1, path2) => {
   return { file1: normalized1, file2: normalized2 };
 };
 
-export default (path1, path2) => {
-  const { file1: before, file2: after } = readFiles(path1, path2);
+export default (fileToPath1, fileToPath2) => {
+  const { file1: before, file2: after } = readFiles(fileToPath1, fileToPath2);
   const keysBefore = Object.keys(before);
   const keysAfter = Object.keys(after);
   const combinedKeys = [...new Set([...keysBefore, ...keysAfter])]; // or _.union

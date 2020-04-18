@@ -7,11 +7,15 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npx jest",
     "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline"
   },
-  "author": "megaded",
-  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lociero/frontend-project-lvl2.git"
+  },
+  "author": "Dmitriy Frolov",
+  "license": "ISC",
   "dependencies": {
     "commander": "^5.0.0",
     "lodash": "^4.17.15"
