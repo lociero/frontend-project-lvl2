@@ -1,5 +1,5 @@
 import fs from 'fs';
-import genDiff from '../src/genDiff';
+import genDiff from '../src/genDiff.js';
 
 test('should be equal', () => {
   const beforePath = `${__dirname}/../fixtures/before.json`;
