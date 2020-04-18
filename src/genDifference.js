@@ -1,12 +1,16 @@
 import fs from 'fs';
 import _ from 'lodash';
+import path from 'path';
+import parsers from './parsers/parsers.js';
 
 const readFiles = (path1, path2) => {
   const file1 = fs.readFileSync(path1, 'utf-8');
   const file2 = fs.readFileSync(path2, 'utf-8');
-  const normalized1 = JSON.parse(file1);
-  const normalized2 = JSON.parse(file2);
-  return { file1: normalized1, file2: normalized2 };
+  const fileType1 = path.extname(path1);
+  const fileType2 = path.extname(path2);
+  const parsed1 = parsers[fileType1](file1);
+  const parsed2 = parsers[fileType2](file2);
+  return { file1: parsed1, file2: parsed2 };
 };
 
 export default (fileToPath1, fileToPath2) => {
