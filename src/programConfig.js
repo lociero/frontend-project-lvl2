@@ -1,5 +1,5 @@
 import program from 'commander';
-import genDiff from './genDiff.js';
+import genDiff from './genDifference.js';
 
 export default () => {
   program
