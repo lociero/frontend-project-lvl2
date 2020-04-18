@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import genDiff from '../src/genDifference.js';
+import genDiff from '../src/index.js';
 
 const pathResolve = (fileName) => path.resolve(`${__dirname}/../fixtures/`, fileName);
 
