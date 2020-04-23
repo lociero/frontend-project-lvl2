@@ -4,7 +4,7 @@ import genDiff from '../src/index.js';
 
 const pathResolve = (fileName) => path.resolve(`${__dirname}/../fixtures/`, fileName);
 
-const result = fs.readFileSync(pathResolve('flatDiffResult.txt'), 'utf-8');
+const result = fs.readFileSync(pathResolve('diffResult.txt'), 'utf-8');
 
 test('should be equal [.json]', () => {
   expect(genDiff(pathResolve('before.json'), pathResolve('after.json'))).toEqual(result);
