@@ -1,4 +1,4 @@
-import isObject from './utils.js';
+import isObject from '../utils.js';
 
 const operations = {
   unchanged: ' ',
@@ -20,22 +20,21 @@ const stringifyObj = (obj, indent = 0) => JSON.stringify(obj, null, '\n')
   })
   .join('\n');
 
-const render = (tree) => {
-  const renderRecursive = (ast, indent = 0) => ast
+export default (ast) => {
+  const iter = (tree, indent = 0) => tree
     .reduce((acc, node) => {
-      const { key, value, children } = node;
-      // const formattedValue = value;
-      const operation = operations[node.state];
+      const {
+        key, value, children, state,
+      } = node;
+      const operation = operations[state];
       const formattedValue = isObject(value) ? stringifyObj(value, indent + 2) : value;
-      const formattedChildren = children ? renderRecursive(children, indent + 4).trimEnd() : '';
+      const formattedChildren = children ? iter(children, indent + 4).trimEnd() : '';
       const result = `${' '.repeat(indent + 2)}${operation} ${key}: ${
         !children ? formattedValue : `{\n${formattedChildren}\n${' '.repeat(indent + 4)}}`
       }\n`;
       return `${acc}${result}`;
     }, '')
     .replace(/"/g, '');
-  const renderedTree = renderRecursive(tree);
-  return `{\n${renderedTree}}`;
+  // const renderedTree = iter(ast);
+  return `{\n${iter(ast)}}`;
 };
-
-export default render;

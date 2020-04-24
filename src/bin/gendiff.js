@@ -1,4 +1,4 @@
 #!/usr/bin/env node
-import runProgram from '../programConfig.js';
+import runProgram from '../config.js';
 
 runProgram();

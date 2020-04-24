@@ -3,7 +3,7 @@ import _ from 'lodash';
 import path from 'path';
 import parsers from './parsers/parsers.js';
 import isObject from './utils.js';
-import render from './render.js';
+import render from './formatters/render.js';
 
 const readFiles = (path1, path2) => {
   const file1 = fs.readFileSync(path1, 'utf-8');
@@ -17,11 +17,9 @@ const readFiles = (path1, path2) => {
 
 const parseAst = (before, after) => {
   const iter = (segmentBefore, segmentAfter, acc = []) => {
-    // const segmentBeforeKeys = Object.keys(segmentBefore);
     const parsedFirstPart = _.reduce(
       segmentBefore,
       (result, value, key) => {
-        // console.log(result);
         // Обрабатываем глубоко вложенные объекты и рекурсивно проходим по ключам
         if (isObject(value) && isObject(segmentAfter[key])) {
           const node = {
@@ -31,7 +29,6 @@ const parseAst = (before, after) => {
           };
           return [...result, node];
         }
-
         // Обрабатываем удаленные свойства
         // Если свойства - объекты, нет смысла проходить глубже, они уже обработаны выше
         if (!_.has(segmentAfter, key)) {
@@ -42,7 +39,6 @@ const parseAst = (before, after) => {
           };
           return [...result, node];
         }
-
         // Обрабатываем неизмененные свойства
         if (value === segmentAfter[key]) {
           const node = {
@@ -52,24 +48,22 @@ const parseAst = (before, after) => {
           };
           return [...result, node];
         }
-
         // Обрабатываем измененные свойства
-        if (value !== segmentAfter[key]) {
-          const nodes = [
-            {
-              key,
-              value: segmentAfter[key],
-              state: 'added',
-            },
-            {
-              key,
-              value,
-              state: 'deleted',
-            },
-          ];
-          return [...result, ...nodes];
-        }
-        return result;
+        // if (value !== segmentAfter[key]) {
+        const nodes = [
+          {
+            key,
+            value: segmentAfter[key],
+            state: 'added',
+          },
+          {
+            key,
+            value,
+            state: 'deleted',
+          },
+        ];
+        return [...result, ...nodes];
+        // }
       },
       acc,
     );
@@ -91,14 +85,13 @@ const parseAst = (before, after) => {
       acc,
     );
     return [...parsedFirstPart, ...parsedSecondPart];
-    // return newAcc;
   };
   return iter(before, after);
 };
 
-export default (fileToPath1, fileToPath2) => {
+export default (fileToPath1, fileToPath2, formatType = 'json') => {
   const { file1: before, file2: after } = readFiles(fileToPath1, fileToPath2);
   const parsedAst = parseAst(before, after);
-  const renderedDiff = render(parsedAst);
+  const renderedDiff = render[formatType](parsedAst);
   return renderedDiff;
 };
