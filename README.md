@@ -9,14 +9,19 @@
 
 ### Пример работы:
 
-#### JSON:
+#### JSON files:
 
 [![asciicast](https://asciinema.org/a/7jhnqGtW4DClDZ6LgJLMwwaAR.svg)](https://asciinema.org/a/7jhnqGtW4DClDZ6LgJLMwwaAR)
 
-#### YAML:
+#### YAML files:
 
 [![asciicast](https://asciinema.org/a/LvjjUYsCgxhJmniCNDnRGMvVi.svg)](https://asciinema.org/a/LvjjUYsCgxhJmniCNDnRGMvVi)
 
-#### INI:
+#### INI files:
 
-[![asciicast](https://asciinema.org/a/QubKqRoeohrrsXK1o7x6fTPeC.svg)](https://asciinema.org/a/AppzeBo6FcEPBuGdCzTq5PZwN)
+[![asciicast](https://asciinema.org/a/QubKqRoeohrrsXK1o7x6fTPeC.svg)](https://asciinema.org/a/QubKqRoeohrrsXK1o7x6fTPeC)
+
+#### INI files (plain format):
+
+[![asciicast](https://asciinema.org/a/DYjpWWGbHdEfRBc7g8uM57BZA.svg)](https://asciinema.org/a/DYjpWWGbHdEfRBc7g8uM57BZA)
+
