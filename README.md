@@ -10,19 +10,14 @@
 
 ### Пример работы:
 
-#### JSON files:
-
-[![asciicast](https://asciinema.org/a/7jhnqGtW4DClDZ6LgJLMwwaAR.svg)](https://asciinema.org/a/7jhnqGtW4DClDZ6LgJLMwwaAR)
-
-#### YAML files:
+#### JSON'like format [default]:
 
 [![asciicast](https://asciinema.org/a/LvjjUYsCgxhJmniCNDnRGMvVi.svg)](https://asciinema.org/a/LvjjUYsCgxhJmniCNDnRGMvVi)
 
-#### INI files:
+#### JSON (ast) format:
 
-[![asciicast](https://asciinema.org/a/QubKqRoeohrrsXK1o7x6fTPeC.svg)](https://asciinema.org/a/QubKqRoeohrrsXK1o7x6fTPeC)
+[![asciicast](https://asciinema.org/a/XIyd5B0epC4iSIqKRrNjsUMYM.svg)](https://asciinema.org/a/XIyd5B0epC4iSIqKRrNjsUMYM)
 
-#### INI files (plain format):
+#### Plain format:
 
 [![asciicast](https://asciinema.org/a/DYjpWWGbHdEfRBc7g8uM57BZA.svg)](https://asciinema.org/a/DYjpWWGbHdEfRBc7g8uM57BZA)
-
