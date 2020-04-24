@@ -22,10 +22,9 @@ const stringifyObj = (obj, indent = 0) => JSON.stringify(obj, null, '\n')
 
 export default (ast) => {
   const iter = (tree, indent = 0) => tree
-    .reduce((acc, node) => {
-      const {
-        key, value, children, state,
-      } = node;
+    .reduce((acc, {
+      key, value, children, state,
+    }) => {
       const operation = operations[state];
       const formattedValue = isObject(value) ? stringifyObj(value, indent + 2) : value;
       const formattedChildren = children ? iter(children, indent + 4).trimEnd() : '';
