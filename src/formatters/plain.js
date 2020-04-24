@@ -12,9 +12,7 @@ const renderPlain = (ast) => {
       const newPath = path ? `${path}.${key}` : `${key}`;
       const templates = {
         deleted: `Property '${newPath}' was deleted`,
-        added: `Property '${newPath}' was added with value: ${
-          isObject(value) ? '[complex value]' : value
-        }`,
+        added: `Property '${newPath}' was added with value: ${stringifyValue(value)}`,
         changed: (pastValue, newValue) => (
           `Property ${newPath} was changed from ${pastValue} to ${newValue}`
         ),
