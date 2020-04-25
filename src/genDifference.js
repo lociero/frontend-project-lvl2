@@ -89,8 +89,8 @@ const parseAst = (before, after) => {
   return iter(before, after);
 };
 
-export default (fileToPath1, fileToPath2, formatType = 'jsonLike') => {
-  const { file1: before, file2: after } = readFiles(fileToPath1, fileToPath2);
+export default (pathToFile1, pathToFile2, formatType = 'jsonLike') => {
+  const { file1: before, file2: after } = readFiles(pathToFile1, pathToFile2);
   const parsedAst = parseAst(before, after);
   const renderedDiff = render[formatType](parsedAst);
   return renderedDiff;
