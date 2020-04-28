@@ -1,18 +1,15 @@
 import fs from 'fs';
 import _ from 'lodash';
 import path from 'path';
-import parsers from './parsers/index.js';
+import parse from './parsers/index.js';
 import isObject from './utils.js';
 import render from './formatters/index.js';
 
-const readFiles = (path1, path2) => {
-  const file1 = fs.readFileSync(path1, 'utf-8');
-  const file2 = fs.readFileSync(path2, 'utf-8');
-  const fileType1 = path.extname(path1);
-  const fileType2 = path.extname(path2);
-  const parsed1 = parsers[fileType1](file1);
-  const parsed2 = parsers[fileType2](file2);
-  return { file1: parsed1, file2: parsed2 };
+const readFile = (pathToFile) => {
+  const file = fs.readFileSync(pathToFile, 'utf-8');
+  const fileType = path.extname(pathToFile);
+  const parsed = parse[fileType](file);
+  return parsed;
 };
 
 const buildTree = (segmentBefore, segmentAfter) => {
@@ -77,7 +74,8 @@ const buildTree = (segmentBefore, segmentAfter) => {
 };
 
 export default (pathToFile1, pathToFile2, formatType = 'pretty') => {
-  const { file1: before, file2: after } = readFiles(pathToFile1, pathToFile2);
+  const before = readFile(pathToFile1);
+  const after = readFile(pathToFile2);
   const diffAst = buildTree(before, after);
   const renderedDiff = render[formatType](diffAst);
   return renderedDiff;
