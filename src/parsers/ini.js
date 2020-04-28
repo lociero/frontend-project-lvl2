@@ -1,12 +1,11 @@
 import ini from 'ini';
 
-// eslint-disable-next-line no-restricted-globals
-const isNumeric = (n) => !isNaN(parseFloat(n)) && isFinite(n);
+const isNumber = (n) => !Number.isNaN(parseFloat(n));
 
 export default (file) => {
   const parsedIni = ini.parse(file);
   const stringified = JSON.stringify(parsedIni, (key, value) => {
-    if (isNumeric(value)) {
+    if (isNumber(value)) {
       return parseFloat(value);
     }
     return value;

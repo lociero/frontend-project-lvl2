@@ -6,7 +6,7 @@ const operations = {
   added: '+',
 };
 
-const stringifyObj = (obj, indent = 0) => JSON.stringify(obj, null, '\n')
+const stringifyObj = (obj, indent) => JSON.stringify(obj, null, '\n')
   .split('\n')
   .filter(Boolean)
   .map((str, i, arr) => {
