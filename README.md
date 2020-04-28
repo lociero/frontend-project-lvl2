@@ -10,7 +10,7 @@
 
 ### Пример работы:
 
-#### JSON'like format [default]:
+#### Pretty format [default]:
 
 [![asciicast](https://asciinema.org/a/LvjjUYsCgxhJmniCNDnRGMvVi.svg)](https://asciinema.org/a/LvjjUYsCgxhJmniCNDnRGMvVi)
 

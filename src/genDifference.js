@@ -1,9 +1,9 @@
 import fs from 'fs';
 import _ from 'lodash';
 import path from 'path';
-import parsers from './parsers/parsers.js';
+import parsers from './parsers/index.js';
 import isObject from './utils.js';
-import render from './formatters/render.js';
+import render from './formatters/index.js';
 
 const readFiles = (path1, path2) => {
   const file1 = fs.readFileSync(path1, 'utf-8');
