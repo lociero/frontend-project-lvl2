@@ -15,83 +15,70 @@ const readFiles = (path1, path2) => {
   return { file1: parsed1, file2: parsed2 };
 };
 
-const parseAst = (before, after) => {
-  const iter = (segmentBefore, segmentAfter, acc = []) => {
-    const parsedFirstPart = _.reduce(
-      segmentBefore,
-      (result, value, key) => {
-        // Обрабатываем глубоко вложенные объекты и рекурсивно проходим по ключам
-        if (isObject(value) && isObject(segmentAfter[key])) {
-          const node = {
-            key,
-            state: 'unchanged',
-            children: iter(value, segmentAfter[key]),
-          };
-          return [...result, node];
-        }
-        // Обрабатываем удаленные свойства
-        // Если свойства - объекты, нет смысла проходить глубже, они уже обработаны выше
-        if (!_.has(segmentAfter, key)) {
-          const node = {
-            key,
-            value,
-            state: 'deleted',
-          };
-          return [...result, node];
-        }
-        // Обрабатываем неизмененные свойства
-        if (value === segmentAfter[key]) {
-          const node = {
-            key,
-            value,
-            state: 'unchanged',
-          };
-          return [...result, node];
-        }
-        // Обрабатываем измененные свойства
-        // if (value !== segmentAfter[key]) {
-        const nodes = [
-          {
-            key,
-            value: segmentAfter[key],
-            state: 'added',
-          },
-          {
-            key,
-            value,
-            state: 'deleted',
-          },
-        ];
-        return [...result, ...nodes];
-        // }
-      },
-      acc,
-    );
+const buildTree = (segmentBefore, segmentAfter) => {
+  const beforeKeys = Object.keys(segmentBefore);
+  const afterKeys = Object.keys(segmentAfter);
+  const unionKeys = _.union(beforeKeys, afterKeys); // or [...new Set()]
+  const tree = unionKeys.reduce((acc, key) => {
+    if (isObject(segmentBefore[key]) && isObject(segmentAfter[key])) {
+      const node = {
+        key,
+        state: 'unchanged',
+        children: buildTree(segmentBefore[key], segmentAfter[key]),
+      };
+      return [...acc, node];
+    }
 
-    const parsedSecondPart = _.reduce(
-      segmentAfter,
-      (result, value, key) => {
-        // Обрабатываем добавленные свойства
-        if (!_.has(segmentBefore, key)) {
-          const node = {
-            key,
-            value,
-            state: 'added',
-          };
-          return [...result, node];
-        }
-        return result;
+    if (!_.has(segmentAfter, key)) {
+      const node = {
+        key,
+        value: segmentBefore[key],
+        state: 'deleted',
+      };
+      return [...acc, node];
+    }
+
+    if (!_.has(segmentBefore, key)) {
+      const node = {
+        key,
+        value: segmentAfter[key],
+        state: 'added',
+      };
+      return [...acc, node];
+    }
+
+    if (segmentBefore[key] === segmentAfter[key]) {
+      const node = {
+        key,
+        value: segmentBefore[key],
+        state: 'unchanged',
+      };
+      return [...acc, node];
+    }
+
+    // if (segmentBefore[key] !== segmentAfter[key]) {
+    const nodes = [
+      {
+        key,
+        value: segmentAfter[key],
+        state: 'added',
       },
-      acc,
-    );
-    return [...parsedFirstPart, ...parsedSecondPart];
-  };
-  return iter(before, after);
+      {
+        key,
+        value: segmentBefore[key],
+        state: 'deleted',
+      },
+    ];
+    return [...acc, ...nodes];
+    // }
+  }, []);
+
+  return tree;
 };
 
-export default (pathToFile1, pathToFile2, formatType = 'jsonLike') => {
+export default (pathToFile1, pathToFile2, formatType = 'pretty') => {
   const { file1: before, file2: after } = readFiles(pathToFile1, pathToFile2);
-  const parsedAst = parseAst(before, after);
-  const renderedDiff = render[formatType](parsedAst);
+  const diffAst = buildTree(before, after);
+  const renderedDiff = render[formatType](diffAst);
   return renderedDiff;
 };

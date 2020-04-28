@@ -1,8 +1,8 @@
-import renderJsonLike from './jsonLike.js';
+import renderPretty from './pretty.js';
 import renderPlain from './plain.js';
 
 export default {
-  jsonLike: (ast) => renderJsonLike(ast),
+  pretty: (ast) => renderPretty(ast),
   plain: (ast) => renderPlain(ast),
   json: (ast) => JSON.stringify(ast, null, 2),
 };
