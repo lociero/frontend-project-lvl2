@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import genDiff from '../src/index.js';
 
-const pathResolve = (fileName) => path.resolve(`${__dirname}/../fixtures/`, fileName);
+const pathResolve = (fileName) => path.resolve(`${__dirname}/../__fixtures__/`, fileName);
 
 describe.each(['plain', 'json', 'pretty'])('%s type', (diffType) => {
   const result = fs.readFileSync(pathResolve(`${diffType}Result.txt`), 'utf-8');
