@@ -7,4 +7,4 @@ const formatters = {
   json: JSON.stringify,
 };
 
-export default (type, ast) => formatters[type](ast);
+export default (type = 'pretty', ast) => formatters[type](ast);

@@ -16,14 +16,14 @@ const buildTree = (segmentBefore, segmentAfter) => {
   const beforeKeys = Object.keys(segmentBefore);
   const afterKeys = Object.keys(segmentAfter);
   const unionKeys = _.union(beforeKeys, afterKeys); // or [...new Set()]
-  const tree = unionKeys.reduce((acc, key) => {
+  const tree = unionKeys.flatMap((key) => {
     if (isObject(segmentBefore[key]) && isObject(segmentAfter[key])) {
       const node = {
         key,
         state: 'unchanged',
         children: buildTree(segmentBefore[key], segmentAfter[key]),
       };
-      return [...acc, node];
+      return node;
     }
 
     if (!_.has(segmentAfter, key)) {
@@ -32,7 +32,7 @@ const buildTree = (segmentBefore, segmentAfter) => {
         value: segmentBefore[key],
         state: 'deleted',
       };
-      return [...acc, node];
+      return node;
     }
 
     if (!_.has(segmentBefore, key)) {
@@ -41,7 +41,7 @@ const buildTree = (segmentBefore, segmentAfter) => {
         value: segmentAfter[key],
         state: 'added',
       };
-      return [...acc, node];
+      return node;
     }
 
     if (segmentBefore[key] === segmentAfter[key]) {
@@ -50,7 +50,7 @@ const buildTree = (segmentBefore, segmentAfter) => {
         value: segmentBefore[key],
         state: 'unchanged',
       };
-      return [...acc, node];
+      return node;
     }
 
     // if (segmentBefore[key] !== segmentAfter[key]) {
@@ -66,14 +66,14 @@ const buildTree = (segmentBefore, segmentAfter) => {
         state: 'deleted',
       },
     ];
-    return [...acc, ...nodes];
+    return nodes;
     // }
-  }, []);
+  });
 
   return tree;
 };
 
-export default (pathToFile1, pathToFile2, formatType = 'pretty') => {
+export default (pathToFile1, pathToFile2, formatType) => {
   const before = readFile(pathToFile1);
   const after = readFile(pathToFile2);
   const diffAst = buildTree(before, after);
