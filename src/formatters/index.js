@@ -1,8 +1,10 @@
 import renderPretty from './pretty.js';
 import renderPlain from './plain.js';
 
-export default {
-  pretty: (ast) => renderPretty(ast),
-  plain: (ast) => renderPlain(ast),
-  json: (ast) => JSON.stringify(ast, null, 2),
+const formatters = {
+  pretty: renderPretty,
+  plain: renderPlain,
+  json: JSON.stringify,
 };
+
+export default (type, ast) => formatters[type](ast);

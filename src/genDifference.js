@@ -6,9 +6,9 @@ import isObject from './utils.js';
 import render from './formatters/index.js';
 
 const readFile = (pathToFile) => {
-  const file = fs.readFileSync(pathToFile, 'utf-8');
-  const fileType = path.extname(pathToFile).slice(1);
-  const parsed = parse(fileType, file);
+  const data = fs.readFileSync(pathToFile, 'utf-8');
+  const dataType = path.extname(pathToFile).slice(1);
+  const parsed = parse(dataType, data);
   return parsed;
 };
 
@@ -77,6 +77,6 @@ export default (pathToFile1, pathToFile2, formatType = 'pretty') => {
   const before = readFile(pathToFile1);
   const after = readFile(pathToFile2);
   const diffAst = buildTree(before, after);
-  const renderedDiff = render[formatType](diffAst);
+  const renderedDiff = render(formatType, diffAst);
   return renderedDiff;
 };
