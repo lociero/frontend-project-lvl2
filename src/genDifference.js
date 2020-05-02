@@ -8,27 +8,15 @@ import render from './formatters/index.js';
 const readFile = (pathToFile) => {
   const data = fs.readFileSync(pathToFile, 'utf-8');
   const dataType = path.extname(pathToFile).slice(1);
-  const parsed = parse(dataType, data);
+  const parsed = parse(data, dataType);
   return parsed;
 };
 
 const buildTree = (segmentBefore, segmentAfter) => {
   const beforeKeys = Object.keys(segmentBefore);
   const afterKeys = Object.keys(segmentAfter);
-  const unionKeys = _.union(beforeKeys, afterKeys); // or [...new Set()]
+  const unionKeys = _.union(beforeKeys, afterKeys);
   const tree = unionKeys.flatMap((key) => {
-    const segmentsHaveValues = _.has(segmentBefore, key) && _.has(segmentAfter, key);
-    const valuesAreObjects = isObject(segmentBefore[key]) && isObject(segmentAfter[key]);
-
-    if (segmentsHaveValues && valuesAreObjects) {
-      const node = {
-        key,
-        state: 'unchanged',
-        children: buildTree(segmentBefore[key], segmentAfter[key]),
-      };
-      return node;
-    }
-
     if (!_.has(segmentAfter, key)) {
       const node = {
         key,
@@ -43,6 +31,15 @@ const buildTree = (segmentBefore, segmentAfter) => {
         key,
         value: segmentAfter[key],
         state: 'added',
+      };
+      return node;
+    }
+
+    if (isObject(segmentBefore[key]) && isObject(segmentAfter[key])) {
+      const node = {
+        key,
+        state: 'unchanged',
+        children: buildTree(segmentBefore[key], segmentAfter[key]),
       };
       return node;
     }
@@ -78,6 +75,6 @@ export default (pathToFile1, pathToFile2, formatType) => {
   const before = readFile(pathToFile1);
   const after = readFile(pathToFile2);
   const diffAst = buildTree(before, after);
-  const renderedDiff = render(formatType, diffAst);
+  const renderedDiff = render(diffAst, formatType);
   return renderedDiff;
 };

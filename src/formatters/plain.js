@@ -6,9 +6,9 @@ const stringifyValue = (value) => (isObject(value) ? '[complex value]' : value);
 // Прошел часть курса Полиморфизм, знаю, что аргументы должны быть одинаковыми,
 // но по-другому не придумал =)
 const templates = {
-  deleted: (path) => `Property '${path}' was deleted`,
-  added: (path, value) => `Property '${path}' was added with value: ${stringifyValue(value)}`,
-  changed: (path, pastValue, newValue) => `Property ${path} was changed from ${pastValue} to ${newValue}`,
+  deleted: (key) => `Property '${key}' was deleted`,
+  added: (key, value) => `Property '${key}' was added with value: ${stringifyValue(value)}`,
+  changed: (key, pastValue, newValue) => `Property ${key} was changed from ${pastValue} to ${newValue}`,
 };
 
 const renderPlain = (ast) => {
