@@ -36,12 +36,8 @@ const renderPlain = (ast) => {
 
         return newAcc;
       }
-      const pastValue = result[newPath].state === 'deleted'
-        ? stringifyValue(result[newPath].value)
-        : stringifyValue(value);
-      const newValue = result[newPath].state === 'added'
-        ? stringifyValue(result[newPath].value)
-        : stringifyValue(value);
+      const pastValue = result[newPath].state === 'deleted' ? stringifyValue(result[newPath].value) : stringifyValue(value);
+      const newValue = result[newPath].state === 'added' ? stringifyValue(result[newPath].value) : stringifyValue(value);
       const newAcc = {
         ...result,
         [newPath]: {
