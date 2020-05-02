@@ -12,60 +12,39 @@ const readFile = (pathToFile) => {
   return parsed;
 };
 
+// Сомнения есть по поводу этого решения, но так сократился код.
+const makeNode = (key, value, state, children = null) => {
+  if (children) {
+    return { key, state, children };
+  }
+  return { key, value, state };
+};
+
 const buildTree = (segmentBefore, segmentAfter) => {
   const beforeKeys = Object.keys(segmentBefore);
   const afterKeys = Object.keys(segmentAfter);
   const unionKeys = _.union(beforeKeys, afterKeys);
   const tree = unionKeys.flatMap((key) => {
     if (!_.has(segmentAfter, key)) {
-      const node = {
-        key,
-        value: segmentBefore[key],
-        state: 'deleted',
-      };
-      return node;
+      return makeNode(key, segmentBefore[key], 'deleted');
     }
 
     if (!_.has(segmentBefore, key)) {
-      const node = {
-        key,
-        value: segmentAfter[key],
-        state: 'added',
-      };
-      return node;
+      return makeNode(key, segmentAfter[key], 'added');
     }
 
     if (isObject(segmentBefore[key]) && isObject(segmentAfter[key])) {
-      const node = {
-        key,
-        state: 'unchanged',
-        children: buildTree(segmentBefore[key], segmentAfter[key]),
-      };
-      return node;
+      return makeNode(key, null, 'unchanged', buildTree(segmentBefore[key], segmentAfter[key]));
     }
 
     if (segmentBefore[key] === segmentAfter[key]) {
-      const node = {
-        key,
-        value: segmentBefore[key],
-        state: 'unchanged',
-      };
-      return node;
+      return makeNode(key, segmentBefore[key], 'unchanged');
     }
 
-    const nodes = [
-      {
-        key,
-        value: segmentAfter[key],
-        state: 'added',
-      },
-      {
-        key,
-        value: segmentBefore[key],
-        state: 'deleted',
-      },
+    return [
+      makeNode(key, segmentAfter[key], 'added'),
+      makeNode(key, segmentBefore[key], 'deleted'),
     ];
-    return nodes;
   });
 
   return tree;
