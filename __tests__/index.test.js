@@ -1,8 +1,9 @@
+import { describe, test, expect } from '@jest/globals';
 import fs from 'fs';
 import path from 'path';
 import genDiff from '../src/index.js';
 
-const pathResolve = (fileName) => path.resolve(`${__dirname}/../__fixtures__/`, fileName);
+const pathResolve = (fileName) => path.resolve('./__tests__/__fixtures__/', fileName);
 
 describe.each(['plain', 'json', 'pretty'])('%s type', (diffType) => {
   const result = fs.readFileSync(pathResolve(`${diffType}Result.txt`), 'utf-8');
