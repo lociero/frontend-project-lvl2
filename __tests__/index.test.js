@@ -15,6 +15,7 @@ describe.each(['plain', 'json', 'pretty'])('%s format', (diffType) => {
   });
 });
 
+// Оверинжиниринг? =)
 describe('default format [pretty]', () => {
   const result = fs.readFileSync(pathResolve('prettyResult.txt'), 'utf-8');
   test.each(['json', 'yml', 'ini'])('should be equal [.%s]', (extname) => {
