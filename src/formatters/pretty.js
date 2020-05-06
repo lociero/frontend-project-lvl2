@@ -1,39 +1,51 @@
+import _ from 'lodash';
 import isObject from '../utils.js';
 
-const operations = {
-  unchanged: ' ',
-  deleted: '-',
-  added: '+',
+const stringifyValue = (value, indent) => {
+  if (isObject(value)) {
+    return JSON.stringify(value, null, '\n')
+      .split('\n')
+      .filter(Boolean)
+      .map((str, i, arr) => {
+        if (i === 0) {
+          return str;
+        }
+        if (i === arr.length - 1) {
+          return `${' '.repeat(indent + 2)}${str}`;
+        }
+        return `${' '.repeat(indent + 6)}${str}`;
+      })
+      .join('\n')
+      .replace(/"/g, '');
+  }
+  return value;
 };
 
-const stringifyObj = (obj, indent) => JSON.stringify(obj, null, '\n')
-  .split('\n')
-  .filter(Boolean)
-  .map((str, i, arr) => {
-    if (i === 0) {
-      return str;
-    }
-    if (i === arr.length - 1) {
-      return `${' '.repeat(indent + 2)}${str}`;
-    }
-    return `${' '.repeat(indent + 6)}${str}`;
-  })
-  .join('\n');
+const templates = {
+  added: (key, value, indent) => `${' '.repeat(indent + 2)}+ ${key}: ${stringifyValue(value, indent + 2)}`,
+  deleted: (key, value, indent) => `${' '.repeat(indent + 2)}- ${key}: ${stringifyValue(value, indent + 2)}`,
+  unchanged: (key, value, indent) => `${' '.repeat(indent + 2)}  ${key}: ${stringifyValue(value, indent + 2)}`,
+  withChildren: (key, value, indent) => `${' '.repeat(indent + 2)}  ${key}: {\n${value}\n${' '.repeat(indent + 4)}}`,
+};
 
 export default (ast) => {
-  const iter = (tree, indent = 0) => tree
-    .reduce((acc, {
-      key, value, children, state,
-    }) => {
-      const operation = operations[state];
-      const formattedValue = isObject(value) ? stringifyObj(value, indent + 2) : value;
-      const formattedChildren = children ? iter(children, indent + 4).trimEnd() : '';
-      const result = `${' '.repeat(indent + 2)}${operation} ${key}: ${
-        !children ? formattedValue : `{\n${formattedChildren}\n${' '.repeat(indent + 4)}}`
-      }\n`;
-      return `${acc}${result}`;
-    }, '')
-    .replace(/"/g, '');
-  // const renderedTree = iter(ast);
-  return `{\n${iter(ast)}}`;
+  const iter = (tree, indent = 0) => tree.flatMap((node) => {
+    const {
+      key, value, deletedValue, addedValue, children, state,
+    } = node;
+    if (_.has(node, 'children')) {
+      return templates.withChildren(key, iter(children, indent + 4), indent);
+    }
+
+    if (['added', 'deleted', 'unchanged'].includes(state)) {
+      return templates[state](key, value, indent);
+    }
+
+    const added = templates.added(key, addedValue, indent);
+    const deleted = templates.deleted(key, deletedValue, indent);
+
+    return [added, deleted];
+  }).join('\n');
+
+  return `{\n${iter(ast)}\n}`;
 };

@@ -6,53 +6,30 @@ const stringifyValue = (value) => (isObject(value) ? '[complex value]' : value);
 // Прошел часть курса Полиморфизм, знаю, что аргументы должны быть одинаковыми,
 // но по-другому не придумал =)
 const templates = {
-  deleted: (key) => `Property '${key}' was deleted`,
-  added: (key, value) => `Property '${key}' was added with value: ${stringifyValue(value)}`,
-  changed: (key, pastValue, newValue) => `Property ${key} was changed from ${pastValue} to ${newValue}`,
+  deleted: (path) => `Property '${path}' was deleted`,
+  added: (path, value) => (
+    `Property '${path}' was added with value: ${stringifyValue(value)}`
+  ),
+  changed: (path, value, deletedValue, addedValue) => (
+    `Property ${path} was changed from ${stringifyValue(deletedValue)} to ${stringifyValue(addedValue)}`
+  ),
 };
 
-const renderPlain = (ast) => {
-  const iter = (tree, path = '', acc = {}) => tree.reduce((result, node) => {
+export default (ast) => {
+  const iter = (tree, path = '') => tree.flatMap((node) => {
     const {
-      key, value, state, children,
+      key, value, deletedValue, addedValue, children, state,
     } = node;
     const newPath = path ? `${path}.${key}` : `${key}`;
     if (_.has(node, 'children')) {
-      return iter(children, newPath, result);
+      return iter(children, newPath);
+    }
+    if (['deleted', 'added', 'changed'].includes(state)) {
+      return templates[state](newPath, value, deletedValue, addedValue);
     }
 
-    if (['deleted', 'added'].includes(state)) {
-      // _.has() не подходит из-за особенности структуры аккумулятора (ключи - пути)
-      // Напрямую .hasOwnProperty() eslint не пропускает
-      if (!Object.prototype.hasOwnProperty.call(result, newPath)) {
-        const newAcc = {
-          ...result,
-          [newPath]: {
-            value,
-            state,
-            string: templates[state](newPath, value),
-          },
-        };
+    return null;
+  });
 
-        return newAcc;
-      }
-      const pastValue = result[newPath].state === 'deleted' ? stringifyValue(result[newPath].value) : stringifyValue(value);
-      const newValue = result[newPath].state === 'added' ? stringifyValue(result[newPath].value) : stringifyValue(value);
-      const newAcc = {
-        ...result,
-        [newPath]: {
-          string: templates.changed(newPath, pastValue, newValue),
-        },
-      };
-
-      return newAcc;
-    }
-
-    return result;
-  }, acc);
-
-  const data = iter(ast);
-  return _.map(data, (value) => value.string).join('\n');
+  return iter(ast).filter(Boolean).join('\n');
 };
-
-export default renderPlain;

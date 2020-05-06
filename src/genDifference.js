@@ -16,7 +16,7 @@ const buildTree = (segmentBefore, segmentAfter) => {
   const beforeKeys = Object.keys(segmentBefore);
   const afterKeys = Object.keys(segmentAfter);
   const unionKeys = _.union(beforeKeys, afterKeys);
-  const tree = unionKeys.flatMap((key) => {
+  const tree = unionKeys.map((key) => {
     if (!_.has(segmentAfter, key)) {
       return { key, value: segmentBefore[key], state: 'deleted' };
     }
@@ -33,10 +33,12 @@ const buildTree = (segmentBefore, segmentAfter) => {
       return { key, value: segmentBefore[key], state: 'unchanged' };
     }
 
-    return [
-      { key, value: segmentAfter[key], state: 'added' },
-      { key, value: segmentBefore[key], state: 'deleted' },
-    ];
+    return {
+      key,
+      deletedValue: segmentBefore[key],
+      addedValue: segmentAfter[key],
+      state: 'changed',
+    };
   });
 
   return tree;
