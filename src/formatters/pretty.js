@@ -22,10 +22,18 @@ const stringifyValue = (value, indent) => {
 };
 
 const templates = {
-  added: (key, value, indent) => `${' '.repeat(indent + 2)}+ ${key}: ${stringifyValue(value, indent + 2)}`,
-  deleted: (key, value, indent) => `${' '.repeat(indent + 2)}- ${key}: ${stringifyValue(value, indent + 2)}`,
-  unchanged: (key, value, indent) => `${' '.repeat(indent + 2)}  ${key}: ${stringifyValue(value, indent + 2)}`,
-  withChildren: (key, value, indent) => `${' '.repeat(indent + 2)}  ${key}: {\n${value}\n${' '.repeat(indent + 4)}}`,
+  added: (key, value, indent) => (
+    `${' '.repeat(indent + 2)}+ ${key}: ${stringifyValue(value, indent + 2)}`
+  ),
+  deleted: (key, value, indent) => (
+    `${' '.repeat(indent + 2)}- ${key}: ${stringifyValue(value, indent + 2)}`
+  ),
+  unchanged: (key, value, indent) => (
+    `${' '.repeat(indent + 2)}  ${key}: ${stringifyValue(value, indent + 2)}`
+  ),
+  withChildren: (key, value, indent) => (
+    `${' '.repeat(indent + 2)}  ${key}: {\n${value}\n${' '.repeat(indent + 4)}}`
+  ),
 };
 
 export default (ast) => {
