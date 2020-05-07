@@ -1,11 +1,7 @@
-import fs from 'fs';
 import _ from 'lodash';
-import path from 'path';
 import parse from './parsers/index.js';
-import isObject from './utils.js';
+import { isObject, readFile, getDataType } from './utils.js';
 import render from './formatters/index.js';
-
-const readFile = (pathToFile) => fs.readFileSync(pathToFile, 'utf-8');
 
 const buildTree = (segmentBefore, segmentAfter) => {
   const beforeKeys = Object.keys(segmentBefore);
@@ -43,10 +39,10 @@ export default (pathToFile1, pathToFile2, formatType) => {
   const before = readFile(pathToFile1);
   const after = readFile(pathToFile2);
 
-  const beforeDataType = path.extname(pathToFile1).slice(1);
+  const beforeDataType = getDataType(pathToFile1);
   const beforeParsed = parse(before, beforeDataType);
 
-  const afterDataType = path.extname(pathToFile2).slice(1);
+  const afterDataType = getDataType(pathToFile2);
   const afterParsed = parse(after, afterDataType);
 
   const diffAst = buildTree(beforeParsed, afterParsed);

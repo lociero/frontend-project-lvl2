@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import isObject from '../utils.js';
+import { isObject } from '../utils.js';
 
 const stringifyValue = (value) => (isObject(value) ? '[complex value]' : value);
 
