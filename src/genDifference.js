@@ -5,12 +5,7 @@ import parse from './parsers/index.js';
 import isObject from './utils.js';
 import render from './formatters/index.js';
 
-const readFile = (pathToFile) => {
-  const data = fs.readFileSync(pathToFile, 'utf-8');
-  const dataType = path.extname(pathToFile).slice(1);
-  const parsed = parse(data, dataType);
-  return parsed;
-};
+const readFile = (pathToFile) => fs.readFileSync(pathToFile, 'utf-8');
 
 const buildTree = (segmentBefore, segmentAfter) => {
   const beforeKeys = Object.keys(segmentBefore);
@@ -47,7 +42,15 @@ const buildTree = (segmentBefore, segmentAfter) => {
 export default (pathToFile1, pathToFile2, formatType) => {
   const before = readFile(pathToFile1);
   const after = readFile(pathToFile2);
-  const diffAst = buildTree(before, after);
+
+  const beforeDataType = path.extname(pathToFile1).slice(1);
+  const beforeParsed = parse(before, beforeDataType);
+
+  const afterDataType = path.extname(pathToFile2).slice(1);
+  const afterParsed = parse(after, afterDataType);
+
+  const diffAst = buildTree(beforeParsed, afterParsed);
   const renderedDiff = render(diffAst, formatType);
+
   return renderedDiff;
 };
