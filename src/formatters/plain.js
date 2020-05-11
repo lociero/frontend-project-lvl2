@@ -12,6 +12,7 @@ const templates = {
   changed: (path, value, deletedValue, addedValue) => (
     `Property ${path} was changed from ${stringifyValue(deletedValue)} to ${stringifyValue(addedValue)}`
   ),
+  unchanged: () => null,
 };
 
 export default (ast) => {
@@ -23,11 +24,8 @@ export default (ast) => {
     if (_.has(node, 'children')) {
       return iter(children, newPath);
     }
-    if (['deleted', 'added', 'changed'].includes(state)) {
-      return templates[state](newPath, value, deletedValue, addedValue);
-    }
 
-    return null;
+    return templates[state](newPath, value, deletedValue, addedValue);
   });
 
   return iter(ast).filter(Boolean).join('\n');
