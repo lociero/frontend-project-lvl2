@@ -5,11 +5,10 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import genDiff from '../src/index.js';
 
-const getFixturePath = (fileName) => {
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = path.dirname(__filename);
-  return path.resolve(`${__dirname}/__fixtures__/`, fileName);
-};
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const getFixturePath = (fileName) => path.resolve(`${__dirname}/__fixtures__/`, fileName);
 
 describe.each(['plain', 'json', 'pretty'])('%s format', (diffType) => {
   const result = fs.readFileSync(getFixturePath(`${diffType}Result.txt`), 'utf-8');
@@ -21,7 +20,6 @@ describe.each(['plain', 'json', 'pretty'])('%s format', (diffType) => {
   });
 });
 
-// Оверинжиниринг? =)
 describe('default format [pretty]', () => {
   const result = fs.readFileSync(getFixturePath('prettyResult.txt'), 'utf-8');
   test.each(['json', 'yml', 'ini'])('should be equal [.%s]', (extname) => {
