@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import parse from './parsers/index.js';
-import { isObject, readFile, getDataType } from './utils.js';
+import { readFile, getDataType } from './utils.js';
 import render from './formatters/index.js';
 
 const buildTree = (segmentBefore, segmentAfter) => {
@@ -16,7 +16,7 @@ const buildTree = (segmentBefore, segmentAfter) => {
       return { key, value: segmentAfter[key], state: 'added' };
     }
 
-    if (isObject(segmentBefore[key]) && isObject(segmentAfter[key])) {
+    if (_.isObject(segmentBefore[key]) && _.isObject(segmentAfter[key])) {
       return { key, state: 'unchanged', children: buildTree(segmentBefore[key], segmentAfter[key]) };
     }
 

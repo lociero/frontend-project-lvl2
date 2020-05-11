@@ -1,8 +1,7 @@
 import _ from 'lodash';
-import { isObject } from '../utils.js';
 
 const stringifyValue = (value, indent) => {
-  if (isObject(value)) {
+  if (_.isObject(value)) {
     return JSON.stringify(value, null, '\n')
       .split('\n')
       .filter(Boolean)

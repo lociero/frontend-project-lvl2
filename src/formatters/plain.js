@@ -1,7 +1,6 @@
 import _ from 'lodash';
-import { isObject } from '../utils.js';
 
-const stringifyValue = (value) => (isObject(value) ? '[complex value]' : value);
+const stringifyValue = (value) => (_.isObject(value) ? '[complex value]' : value);
 
 // Прошел часть курса Полиморфизм, знаю, что аргументы должны быть одинаковыми,
 // но по-другому не придумал =)
