@@ -2,8 +2,6 @@ import _ from 'lodash';
 
 const stringifyValue = (value) => (_.isObject(value) ? '[complex value]' : value);
 
-// Прошел часть курса Полиморфизм, знаю, что аргументы должны быть одинаковыми,
-// но по-другому не придумал =)
 const templates = {
   deleted: (path) => `Property '${path}' was deleted`,
   added: (path, value) => (
