@@ -18,10 +18,10 @@ const templates = {
 export default (ast) => {
   const iter = (tree, path = '') => tree.flatMap((node) => {
     const {
-      key, value, deletedValue, addedValue, children, state,
+      key, type, value, deletedValue, addedValue, children, state,
     } = node;
     const newPath = path ? `${path}.${key}` : `${key}`;
-    if (_.has(node, 'children')) {
+    if (type === 'object') {
       return iter(children, newPath);
     }
 

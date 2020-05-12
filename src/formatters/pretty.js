@@ -21,37 +21,35 @@ const stringifyValue = (value, indent) => {
 };
 
 const templates = {
-  added: (key, value, indent) => (
-    `${' '.repeat(indent + 2)}+ ${key}: ${stringifyValue(value, indent + 2)}`
-  ),
-  deleted: (key, value, indent) => (
-    `${' '.repeat(indent + 2)}- ${key}: ${stringifyValue(value, indent + 2)}`
-  ),
-  unchanged: (key, value, indent) => (
-    `${' '.repeat(indent + 2)}  ${key}: ${stringifyValue(value, indent + 2)}`
-  ),
-  withChildren: (key, value, indent) => (
-    `${' '.repeat(indent + 2)}  ${key}: {\n${value}\n${' '.repeat(indent + 4)}}`
-  ),
+  added(key, value, indent) {
+    return `${' '.repeat(indent + 2)}+ ${key}: ${stringifyValue(value, indent + 2)}`;
+  },
+  deleted(key, value, indent) {
+    return `${' '.repeat(indent + 2)}- ${key}: ${stringifyValue(value, indent + 2)}`;
+  },
+  unchanged(key, value, indent) {
+    return `${' '.repeat(indent + 2)}  ${key}: ${stringifyValue(value, indent + 2)}`;
+  },
+  changed(key, value, indent, addedValue, deletedValue) {
+    const added = this.added(key, addedValue, indent);
+    const deleted = this.deleted(key, deletedValue, indent);
+    return [added, deleted].join('\n');
+  },
+  changedObj(key, value, indent) {
+    return `${' '.repeat(indent + 2)}  ${key}: {\n${value}\n${' '.repeat(indent + 4)}}`;
+  },
 };
 
 export default (ast) => {
-  const iter = (tree, indent = 0) => tree.flatMap((node) => {
+  const iter = (tree, indent = 0) => tree.map((node) => {
     const {
-      key, value, deletedValue, addedValue, children, state,
+      key, type, value, deletedValue, addedValue, children, state,
     } = node;
-    if (_.has(node, 'children')) {
-      return templates.withChildren(key, iter(children, indent + 4), indent);
+    if (type === 'object') {
+      return templates.changedObj(key, iter(children, indent + 4), indent);
     }
 
-    if (['added', 'deleted', 'unchanged'].includes(state)) {
-      return templates[state](key, value, indent);
-    }
-
-    const added = templates.added(key, addedValue, indent);
-    const deleted = templates.deleted(key, deletedValue, indent);
-
-    return [added, deleted];
+    return templates[state](key, value, indent, addedValue, deletedValue);
   }).join('\n');
 
   return `{\n${iter(ast)}\n}`;

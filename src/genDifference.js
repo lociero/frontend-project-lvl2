@@ -9,19 +9,39 @@ const buildTree = (segmentBefore, segmentAfter) => {
   const unionKeys = _.union(beforeKeys, afterKeys);
   const tree = unionKeys.map((key) => {
     if (!_.has(segmentAfter, key)) {
-      return { key, value: segmentBefore[key], state: 'deleted' };
+      return {
+        key,
+        value: segmentBefore[key],
+        state: 'deleted',
+        type: 'primitive',
+      };
     }
 
     if (!_.has(segmentBefore, key)) {
-      return { key, value: segmentAfter[key], state: 'added' };
+      return {
+        key,
+        value: segmentAfter[key],
+        state: 'added',
+        type: 'primitive',
+      };
     }
 
     if (_.isObject(segmentBefore[key]) && _.isObject(segmentAfter[key])) {
-      return { key, state: 'unchanged', children: buildTree(segmentBefore[key], segmentAfter[key]) };
+      return {
+        key,
+        state: 'unchanged',
+        type: 'object',
+        children: buildTree(segmentBefore[key], segmentAfter[key]),
+      };
     }
 
     if (segmentBefore[key] === segmentAfter[key]) {
-      return { key, value: segmentBefore[key], state: 'unchanged' };
+      return {
+        key,
+        value: segmentBefore[key],
+        state: 'unchanged',
+        type: 'primitive',
+      };
     }
 
     return {
@@ -29,6 +49,7 @@ const buildTree = (segmentBefore, segmentAfter) => {
       deletedValue: segmentBefore[key],
       addedValue: segmentAfter[key],
       state: 'changed',
+      type: 'primitive',
     };
   });
 
