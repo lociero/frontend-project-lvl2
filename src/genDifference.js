@@ -12,8 +12,7 @@ const buildTree = (segmentBefore, segmentAfter) => {
       return {
         key,
         value: segmentBefore[key],
-        state: 'deleted',
-        type: 'primitive',
+        type: 'deleted',
       };
     }
 
@@ -21,16 +20,14 @@ const buildTree = (segmentBefore, segmentAfter) => {
       return {
         key,
         value: segmentAfter[key],
-        state: 'added',
-        type: 'primitive',
+        type: 'added',
       };
     }
 
     if (_.isObject(segmentBefore[key]) && _.isObject(segmentAfter[key])) {
       return {
         key,
-        state: 'unchanged',
-        type: 'object',
+        type: 'nested',
         children: buildTree(segmentBefore[key], segmentAfter[key]),
       };
     }
@@ -39,8 +36,7 @@ const buildTree = (segmentBefore, segmentAfter) => {
       return {
         key,
         value: segmentBefore[key],
-        state: 'unchanged',
-        type: 'primitive',
+        type: 'unchanged',
       };
     }
 
@@ -48,8 +44,7 @@ const buildTree = (segmentBefore, segmentAfter) => {
       key,
       deletedValue: segmentBefore[key],
       addedValue: segmentAfter[key],
-      state: 'changed',
-      type: 'primitive',
+      type: 'changed',
     };
   });
 
