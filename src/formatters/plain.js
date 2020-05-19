@@ -17,15 +17,15 @@ const templates = {
 };
 
 
-const plainFormatter = (ast, path = '') => ast.map(({ key, type, ...node }) => {
+const renderPlain = (ast, path = '') => ast.map(({ key, type, ...node }) => {
   const newPath = path ? `${path}.${key}` : `${key}`;
   const options = {
     path: newPath,
     ...node,
-    formatter: plainFormatter,
+    formatter: renderPlain,
   };
   return templates[type](options);
 }).filter(Boolean).join('\n');
 
 
-export default plainFormatter;
+export default renderPlain;
